@@ -1,0 +1,143 @@
+Connected to arduino at COM 7.
+Backend server listening to port 4040.
+Degrees from frontend:  [
+   90,  90, 180, 180, 135,
+  120, 106,  95,  90,  90,
+   90, 180,   0
+]
+Degrees to be sent to Arduino:  [
+   90, 180, 180, 135,
+  120, 106,  95,  90
+]
+Reduced degrees:  [
+   9, 18, 18, 13,
+  12, 10,  9,  9
+]
+Data sent to arduino:  0918181312100909
+Degrees from frontend:  [
+   90,  90, 180, 180, 133,
+  154, 141, 117,  90,  90,
+   90,   0,   4
+]
+Degrees to be sent to Arduino:  [
+   90, 180, 180, 133,
+  154, 141, 117,  90
+]
+Reduced degrees:  [
+   9, 18, 18, 13,
+  15, 14, 11,  9
+]
+Data sent to arduino:  0918181315141109
+Degrees from frontend:  [
+   90,  90, 167, 170, 150,
+  154, 134, 122,  90,  90,
+   90,   0,   0
+]
+Degrees to be sent to Arduino:  [
+   90, 167, 170, 150,
+  154, 134, 122,  90
+]
+Reduced degrees:  [
+   9, 16, 17, 15,
+  15, 13, 12,  9
+]
+Data sent to arduino:  0916171515131209
+Degrees from frontend:  [
+   88,  90, 163, 166, 146,
+  169, 135, 128,  85,  90,
+   90,   3,   4
+]
+Degrees to be sent to Arduino:  [
+   88, 163, 166, 146,
+  169, 135, 128,  85
+]
+Reduced degrees:  [
+   8, 16, 16, 14,
+  16, 13, 12,  8
+]
+Data sent to arduino:  0816161416131208
+Degrees from frontend:  [
+   90,  90, 169, 172, 147,
+  164, 131, 126,  86,  90,
+   90,   0,  10
+]
+Degrees to be sent to Arduino:  [
+   90, 169, 172, 147,
+  164, 131, 126,  86
+]
+Reduced degrees:  [
+   9, 16, 17, 14,
+  16, 13, 12,  8
+]
+Data sent to arduino:  0916171416131208
+Degrees from frontend:  [
+   95,  90, 164, 176, 129,
+  161, 110, 122,  86,  90,
+   90,  10,   9
+]
+Degrees to be sent to Arduino:  [
+   95, 164, 176, 129,
+  161, 110, 122,  86
+]
+Reduced degrees:  [
+   9, 16, 17, 12,
+  16, 11, 12,  8
+]
+Data sent to arduino:  0916171216111208
+Degrees from frontend:  [
+   83,  90, 180, 177, 98,
+  134, 108, 136,  76, 90,
+   90,   0,   0
+]
+Degrees to be sent to Arduino:  [
+   83, 180, 177, 98,
+  134, 108, 136, 76
+]
+Reduced degrees:  [
+   8, 18, 17, 9,
+  13, 10, 13, 7
+]
+Data sent to arduino:  0818170913101307
+Degrees from frontend:  [
+   80,  90, 100, 177, 91,
+  135, 132, 135,  73, 90,
+   90,  75,   8
+]
+Degrees to be sent to Arduino:  [
+   80, 100, 177, 91,
+  135, 132, 135, 73
+]
+Reduced degrees:  [
+   8, 10, 17, 9,
+  13, 13, 13, 7
+]
+Data sent to arduino:  0810170913131307
+Degrees from frontend:  [
+   90,  90, 180, 180, 97,
+  160, 106, 138,  94, 90,
+   90,   0,   4
+]
+Degrees to be sent to Arduino:  [
+   90, 180, 180, 97,
+  160, 106, 138, 94
+]
+Reduced degrees:  [
+   9, 18, 18, 9,
+  16, 10, 13, 9
+]
+Data sent to arduino:  0918180916101309
+Degrees from frontend:  [
+   90,  90, 180, 171, 97,
+  134, 108, 140, 103, 90,
+   90,   1,   2
+]
+Degrees to be sent to Arduino:  [
+   90, 180, 171,  97,
+  134, 108, 140, 103
+]
+Reduced degrees:  [
+   9, 18, 17,  9,
+  13, 10, 14, 10
+]
+Data sent to arduino:  0918170913101410
+^CTerminate batch job (Y/N)?

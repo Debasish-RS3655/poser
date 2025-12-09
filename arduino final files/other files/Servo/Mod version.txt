@@ -1,0 +1,5 @@
+This version of servo.h library has been modified to be compatible with the pose imitator function.
+Basically we replace the timer 1 used by the library to a non-existing timer 6
+
+Pose Imitator
+Debasish Buragohain

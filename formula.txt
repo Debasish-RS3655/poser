@@ -1,0 +1,4 @@
+converts the Euclidean distance between two adjacent points as the angle between a fixed servo and a rotating servo. This is done for all the keypoints detected using Pose Estimator Tensorflow.js and sends the servo degrees
+to the arduino which rotates the servos.
+
+Debashish Buragohain
