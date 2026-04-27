@@ -18,40 +18,49 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-// --- Servo Mapping (RAW INDICES 0-8) ---
-// We keep head vertical in the map so the input parser accepts it,
-// but the transmitted value is always forced to 90.
+// --- Servo Mapping (SENT INDICES 0-10) ---
+// Transmission layout:
+// 0 head horizontal, 1 right shoulder vertical, 2 left shoulder vertical,
+// 3 right shoulder horizontal, 4 left shoulder horizontal,
+// 5 right elbow, 6 left elbow, 7 base, 8 head vertical (forced to 90),
+// 9 left ear, 10 right ear.
 const servoMap = {
     'head': 0,
     'head horizontal': 0,
     'hh': 0,
 
-    'head vertical': 1,
-    'hv': 1,
+    'head vertical': 8,
+    'hv': 8,
 
-    'right shoulder vertical': 2,
-    'rsv': 2,
+    'right shoulder vertical': 1,
+    'rsv': 1,
 
-    'left shoulder vertical': 3,
-    'lsv': 3,
+    'left shoulder vertical': 2,
+    'lsv': 2,
 
-    'right shoulder horizontal': 4,
-    'rsh': 4,
+    'right shoulder horizontal': 3,
+    'rsh': 3,
 
-    'left shoulder horizontal': 5,
-    'lsh': 5,
+    'left shoulder horizontal': 4,
+    'lsh': 4,
 
-    'right elbow': 6,
-    're': 6,
+    'right elbow': 5,
+    're': 5,
 
-    'left elbow': 7,
-    'le': 7,
+    'left elbow': 6,
+    'le': 6,
 
-    'base': 8
+    'base': 7,
+
+    'left ear': 9,
+    'lear': 9,
+
+    'right ear': 10,
+    'rear': 10
 };
 
 // Persistent pose state in memory.
-const currentPose = new Array(9).fill(90);
+const currentPose = new Array(11).fill(90);
 
 // --- Helper: Print Available Names ---
 function printServoList() {
@@ -62,7 +71,7 @@ function printServoList() {
         groupedNames[index].push(name);
     }
     Object.keys(groupedNames).sort().forEach(id => {
-        let note = (id == 1) ? " (Will be SKIPPED)" : "";
+        let note = (id == 8) ? " (Always sent as 90)" : "";
         console.log(`ID ${id}${note}: [ ${groupedNames[id].join(', ')} ]`);
     });
     console.log("-----------------------------\n");
@@ -72,7 +81,7 @@ function buildSendData(pose) {
     let sendData = "";
 
     for (let i = 0; i < pose.length; i++) {
-        const valueToSend = i === 1 ? 90 : pose[i];
+        const valueToSend = i === 8 ? 90 : pose[i];
         const reducedValue = Math.floor(valueToSend / 10);
         sendData += reducedValue >= 10 ? String(reducedValue) : `0${reducedValue}`;
     }
@@ -84,7 +93,7 @@ function buildSendData(pose) {
 console.log(`--- Servo Controller Initialized on COM${COMport} ---`);
 printServoList();
 console.log("Enter command in format: <servo_name> <degrees>");
-console.log("Examples: 'head 45', 'rsv 180'");
+console.log("Examples: 'head 45', 'rsv 180', 'left ear 120', 'rear 60'");
 console.log("Note: 'head vertical' will always transmit as 90, regardless of input.");
 
 function promptUser() {
@@ -127,7 +136,7 @@ function handleInput(input) {
         }
 
         console.log(`Sent: ${sendData} (Updated '${servoName}' to ${degrees}°)`);
-        if (targetIndex === 1) {
+        if (targetIndex === 8) {
             console.log('Warning: Head Vertical is forced to 90 in the transmitted data.');
         }
     });
