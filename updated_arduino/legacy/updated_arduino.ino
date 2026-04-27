@@ -1,6 +1,9 @@
-// Pose Imitator Arduino Mega Code (Serial Ears Version)
+// Pose Imitator Arduino Mega Code
 // Debasish Buragohain
 #include <Servo.h>
+
+long int lastTimeMoved = 0;
+const int gapInEarMovements = 6000;
 
 Servo servoHeadHor;
 Servo servoHeadVer;
@@ -56,17 +59,19 @@ void loop() {
       delay(10);
       inputText += c;
     }
-
-    // 11 servos * 2 digits each = 22 characters.
-    if (inputText.length() > 22) {
-      inputText.remove(22);
+    
+    // --- FIX 1: Remove garbage ONLY after the 18th character (9 servos * 2 digits) ---
+    // If your input has newline characters (\r\n), this cleans them up without cutting data.
+    if (inputText.length() > 18) {
+       inputText.remove(18); 
     }
 
     Serial.println("");
     Serial.print("Raw Input: ");
     Serial.println(inputText);
 
-    if (inputText.length() != 22) {
+    // --- FIX 2: Check for length 18 (9 Servos) ---
+    if (inputText.length() != 18) {
       Serial.print("Invalid length: ");
       Serial.print(inputText.length());
       for (int dh = 0; dh < 2; dh++) {
@@ -76,16 +81,18 @@ void loop() {
       return;
     }
     else {
-      int inputDegrees[11] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-
-      for (int i = 0; i <= 21; i += 2) {
+      // --- FIX 3: Increase Array Size to 9 ---
+      int inputDegrees[9] = { -1, -1, -1, -1, -1, -1, -1, -1, -1};
+      
+      // --- FIX 4: Increase loop limit to read all 18 chars ---
+      for (int i = 0; i <= 17; i += 2) {
         int tens = (int(inputText[i]) - 48) * 10;
         int ones = (int(inputText[i + 1]) - 48);
-        inputDegrees[i / 2] = (tens + ones) * 10;
+        inputDegrees[i / 2] = (tens + ones) * 10; 
       }
 
       String displayIt;
-      for (int i = 0; i < 11; i++) {
+      for (int i = 0; i < 9; i++) {
         if (inputDegrees[i] == -1) {
           Serial.print("Error: input degree array contains an error value.");
           return;
@@ -95,8 +102,11 @@ void loop() {
       Serial.print("Parsed Angles: ");
       Serial.println(displayIt);
 
-      // Existing mapping retained from the source file.
+      if (millis() - lastTimeMoved >= gapInEarMovements) moveEarServos();
+      
+      // Map the 9 values to your servos
       if (servoHeadHor.read() != inputDegrees[0]) { servoHeadHor.write(inputDegrees[0]); delay(150); }
+      // Note: You skipped index 1 in your Node logic previously, ensure this mapping matches your new 9-value logic
       if (servorightShoulderY.read() != inputDegrees[1]) { servorightShoulderY.write(inputDegrees[1]); delay(150); }
       if (servoleftShoulderY.read() != inputDegrees[2]) { servoleftShoulderY.write(inputDegrees[2]); delay(150); }
       if (servorightShoulderX.read() != inputDegrees[3]) { servorightShoulderX.write(inputDegrees[3]); delay(150); }
@@ -104,15 +114,24 @@ void loop() {
       if (servorightElbow.read() != inputDegrees[5]) { servorightElbow.write(inputDegrees[5]); delay(150); }
       if (servoleftElbow.read() != inputDegrees[6]) { servoleftElbow.write(inputDegrees[6]); delay(150); }
       if (servobase.read() != inputDegrees[7]) { servobase.write(inputDegrees[7]); delay(150); }
-
-      // Use slot 8 for head vertical so all 11 serial values are applied.
-      if (servoHeadVer.read() != inputDegrees[8]) { servoHeadVer.write(inputDegrees[8]); delay(150); }
-
-      // New serial-controlled ear slots.
-      // Last second value -> left ear, last value -> right ear.
-      if (servoleftEar.read() != inputDegrees[9]) { servoleftEar.write(inputDegrees[9]); delay(150); }
-      if (servorightEar.read() != inputDegrees[10]) { servorightEar.write(inputDegrees[10]); delay(150); }
+      
+      // --- FIX 5: Handle the 9th Value (Index 8) ---
+      // You need to decide which physical servo 'inputDegrees[8]' controls.
+      // For example, if it's the Head Vertical:
+      // if (servoHeadVer.read() != inputDegrees[8]) { servoHeadVer.write(inputDegrees[8]); delay(150); }
     }
     delay(40);
   }
+}
+
+void moveEarServos() {
+  lastTimeMoved = millis();
+  int servoTarget;
+  switch (servorightEar.read()) {
+    case 0: servoTarget = 90; break;
+    case 90: int ranNum = round(random(0, 1)); servoTarget = (ranNum == 0) ? 0 : 180; break;
+    case 180: servoTarget = 90; break;
+  }
+  servorightEar.write(servoTarget); delay(300);
+  servoleftEar.write(servoTarget); delay(300);
 }
