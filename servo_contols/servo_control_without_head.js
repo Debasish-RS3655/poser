@@ -20,7 +20,7 @@ const rl = readline.createInterface({
 
 // --- Servo Mapping (RAW INDICES 0-8) ---
 // We keep head vertical in the map so the input parser accepts it,
-// but it will be skipped during transmission.
+// but the transmitted value is always forced to 90.
 const servoMap = {
     'head': 0,
     'head horizontal': 0,
@@ -51,7 +51,6 @@ const servoMap = {
 };
 
 // Persistent pose state in memory.
-// Index 1 is kept here for completeness, but it is not sent.
 const currentPose = new Array(9).fill(90);
 
 // --- Helper: Print Available Names ---
@@ -73,9 +72,8 @@ function buildSendData(pose) {
     let sendData = "";
 
     for (let i = 0; i < pose.length; i++) {
-        if (i === 1) continue;
-
-        const reducedValue = Math.floor(pose[i] / 10);
+        const valueToSend = i === 1 ? 90 : pose[i];
+        const reducedValue = Math.floor(valueToSend / 10);
         sendData += reducedValue >= 10 ? String(reducedValue) : `0${reducedValue}`;
     }
 
@@ -87,7 +85,7 @@ console.log(`--- Servo Controller Initialized on COM${COMport} ---`);
 printServoList();
 console.log("Enter command in format: <servo_name> <degrees>");
 console.log("Examples: 'head 45', 'rsv 180'");
-console.log("Note: 'head vertical' commands will be accepted but filtered out.");
+console.log("Note: 'head vertical' will always transmit as 90, regardless of input.");
 
 function promptUser() {
     rl.question('Command: ', (input) => {
@@ -130,7 +128,7 @@ function handleInput(input) {
 
         console.log(`Sent: ${sendData} (Updated '${servoName}' to ${degrees}°)`);
         if (targetIndex === 1) {
-            console.log('Warning: You moved Head Vertical, but it was filtered out of the serial data.');
+            console.log('Warning: Head Vertical is forced to 90 in the transmitted data.');
         }
     });
 }
