@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Pose Imitator - Upload Image</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #controls { margin: 12px 0; }
+    </style>
+    <script src="./@1.7.0tf.min.js"></script>
+    <script src="./posenet.js"></script>
+    
+</head>
+
+<body>
+    <h2 align="center">Pose Imitator - Upload Image</h2>
+
+    <div id="controls">
+        <input type="file" id="imageUpload" accept="image/*" />
+        <span id="uploadStatus"></span>
+    </div>
+
+    <div>
+        <img id="uploadedImage" alt="Selected image will appear here" style="display:block;max-width:450px;max-height:500px;border:1px solid #ccc;" />
+    </div>
+
+    <canvas id="postureOutput" style="border:1px solid #000000;margin-top:8px;" height="450" width="500"></canvas><br>
+    <h3>Results</h3>
+    <div id="pose_detection"> </div>
+
+    <script src="./poseImitatorUpload.js"></script>
+</body>
+
+</html>

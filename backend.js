@@ -4,6 +4,8 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
 
@@ -39,6 +41,31 @@ app.use(function (err, req, res, next) {
     next();
 });
 app.use('/file', express.static(path.join(__dirname)));
+
+// Ensure uploads directory exists and configure multer to store uploads there
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadsDir);
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, Date.now() + ext);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Image upload endpoint. Returns the public URL for the uploaded image.
+app.post('/uploadImage', upload.single('image'), function (req, res) {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  const fileUrl = `${req.protocol}://${req.get('host')}/file/uploads/${req.file.filename}`;
+  res.json({ url: fileUrl });
+});
 
 if (Serial !== null) {
     console.log(`Connected to arduino at COM ${COMport}.`);
